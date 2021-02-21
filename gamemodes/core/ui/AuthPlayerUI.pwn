@@ -30,7 +30,7 @@ stock authUI_display(playerid) {
 	strcat(text, nickname, sizeof(text));
 	if (player_isRegistered(playerid)) {
 		text[82] = 'g';
-		strcat(text, "~s~ yra~n~         registruotas!", sizeof(text));
+		strcat(text, "~s~ yra~n~         registruota!", sizeof(text));
 		TextDrawShowForPlayer(playerid, authUI_login_button);
 	} else {
 		strcat(text, "~s~ nera~n~         registruotas!", sizeof(text));
