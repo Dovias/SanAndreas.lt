@@ -14,5 +14,6 @@ public OnPlayerConnect(playerid) {
 
 public OnPlayerDisconnect(playerid, reason) {
 	player_saveData(playerid);
+	player_clearData(playerid);
 	//authUI_hide(playerid); Seems to be unused leftover for now.
 }

@@ -6,7 +6,7 @@ enum dataOption {
 enum playerData {
 	sqlID,
 	hashedPass[MAX_HASH_LENGTH+1],
-	hashedEmail[MAX_HASH_LENGTH+1],
+	bool:hasEmail,
 	Float:xLoc,
 	Float:yLoc,
 	Float:zLoc,
@@ -75,6 +75,19 @@ public player_saveData(playerid) {
 	return mysql_pquery(g_sql, query, "onPlayerDataSave", "d", playerid);
 }
 
+stock player_clearData(playerid) {
+	if (!player_isRegistered(playerid)) {
+		return;
+	}
+	sPlayerData[playerid][sqlID] = 0;
+	sPlayerData[playerid][hashedPass][0] = '\0'; 
+	sPlayerData[playerid][hasEmail] = false;
+	sPlayerData[playerid][xLoc] = 0.0;
+	sPlayerData[playerid][yLoc] = 0.0;
+	sPlayerData[playerid][zLoc] = 0.0;
+	sPlayerData[playerid][angle] = 0.0;
+}
+
 public onPlayerDataLoaded(playerid, dataOption:data) {
 	if (!cache_is_any_active()) {
 		return;
@@ -89,8 +102,9 @@ public onPlayerDataLoaded(playerid, dataOption:data) {
 		return;
 	}
 	cache_get_value_index(0, 0, sPlayerData[playerid][hashedPass], MAX_HASH_LENGTH+1);
-	cache_get_value_index(0, 1, sPlayerData[playerid][hashedEmail], MAX_HASH_LENGTH+1);
-	
+	cache_is_value_index_null(0, 1, sPlayerData[playerid][hasEmail]);
+	sPlayerData[playerid][hasEmail] = !sPlayerData[playerid][hasEmail];
+
 	authUI_display(playerid);
 
 }

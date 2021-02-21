@@ -5,7 +5,7 @@
         "label": "pawn-community",
         "type": "shell",
         "command": "D:/Program Files/Pawn/bin/community/pawncc.exe",
-        "args": ["${file}", "--%", "-Dgamemodes", "-;+", "-(+", "-d3", "-w239"],
+        "args": ["${fileWorkspaceFolder}${pathSeparator}gamemodes${pathSeparator}SAlife.pwn", "--%", "-Dgamemodes", "-;+", "-(+", "-d3", "-w239"],
         "group": {
             "kind": "build",
             "isDefault": true

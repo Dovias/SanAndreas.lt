@@ -11,7 +11,8 @@ stock player_isAuthenticating(playerid) {
 
 stock player_auth(playerid, password[]) {
 	new length = strlen(password);
-	if (isNull(password) || length < MIN_PASSWORD || length > MAX_PASSWORD || !IsPlayerConnected(playerid)) {
+	//wtf?
+	if (length < MIN_PASSWORD || length > MAX_PASSWORD) {
 		return false;
 	}
 	new hash[MAX_HASH_LENGTH];

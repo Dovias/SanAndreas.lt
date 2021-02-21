@@ -7,9 +7,9 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid) {
 	} else if (clickedid == authUI_register_button) {
 		if (!metadata[playerid][policyAgreed]) {
 			authUI_promptAuthDialog(playerid, authRenderOption:AUTH_POLICY);
-		} else {
-			authUI_promptAuthDialog(playerid);
+			return;
 		}
+		authUI_promptAuthDialog(playerid);
 	} else if (clickedid == authUI_quit_button) {
 		authUI_promptQuitDialog(playerid);
 	} else if (clickedid == authUI_info_button) {
@@ -22,33 +22,39 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid) {
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 	switch (dialogid) {
 	case DIALOG_AUTH: {
-		if (response == 1) {
-			if (!player_auth(playerid, inputtext)) {
-				if (player_isRegistered(playerid)) {
-					authUI_promptAuthDialog(playerid, authRenderOption:AUTH_INVALID_PASS);
-				} else {
-					if (!metadata[playerid][policyAgreed]) {
-						metadata[playerid][policyAgreed] = true;
-						authUI_promptAuthDialog(playerid);
-						return;
-					}
-					if (isNull(inputtext)) {
-						authUI_promptAuthDialog(playerid);
-						return;
-					}
-					authUI_promptAuthDialog(playerid, authRenderOption:AUTH_INCORRECT_PASS);
-				}
+		if (response) {
+			if (isNull(inputtext)) {
+				authUI_promptAuthDialog(playerid);
 				return;
 			}
-			// FIX THIS!
-			/*if (!sPlayerData[playerid][hasEmail]) {
-				authUI_promptAuthDialog(playerid, authRenderOption:AUTH_EMAIL);
-				verificated = true;
+			if (!player_auth(playerid, inputtext)) {
+				authUI_promptAuthDialog(playerid, authRenderOption:AUTH_INVALID_PASS);
 				return;
-			}*/
+			}
+			if (!sPlayerData[playerid][hasEmail]) {
+				authUI_promptAuthDialog(playerid, authRenderOption:AUTH_EMAIL);
+				return;
+			}
 			authUI_close(playerid);
 			player_loadData(playerid, dataOption:DATA_GAME);
 		}
+	} case DIALOG_AUTH_POLICY: {
+		if (!response) {
+			return;
+		}
+		metadata[playerid][policyAgreed] = true;
+		authUI_promptAuthDialog(playerid);
+	} case DIALOG_AUTH_EMAIL: {
+		if (!response) {
+			return;
+		}
+		if (isNull(inputtext)) {
+			authUI_promptAuthDialog(playerid, authRenderOption:AUTH_EMAIL);
+			return;
+		}
+		//todo checking email.
+		authUI_close(playerid);
+		player_loadData(playerid, dataOption:DATA_GAME);
 	} case DIALOG_AUTH_QUIT: {
 		if (response == 1) {
 			player_kick(playerid);

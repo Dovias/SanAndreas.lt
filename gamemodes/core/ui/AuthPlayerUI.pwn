@@ -7,14 +7,12 @@ enum authRenderOption {
 	AUTH_NORMAL,
 	AUTH_POLICY,
 	AUTH_EMAIL,
-	AUTH_INVALID_PASS,
-	AUTH_INCORRECT_PASS
+	AUTH_INVALID_PASS
 }
 
 enum authUImetadata {
 	PlayerText:authUIInfo,
 	bool:policyAgreed,
-	bool:verificated,
 	loginAttempts
 }
 
@@ -106,7 +104,7 @@ stock authUI_promptAuthDialog(playerid, authRenderOption:error=AUTH_NORMAL) {
 		);
 	} case AUTH_POLICY: {
 		ShowPlayerDialog(playerid,
-						 serverDialog:DIALOG_AUTH,
+						 serverDialog:DIALOG_AUTH_POLICY,
 						 DIALOG_STYLE_MSGBOX,
 						 caption,
 						 "\n\
@@ -121,12 +119,12 @@ stock authUI_promptAuthDialog(playerid, authRenderOption:error=AUTH_NORMAL) {
 		);
 	} case AUTH_EMAIL: {
 		ShowPlayerDialog(playerid,
-						 serverDialog:DIALOG_AUTH,
+						 serverDialog:DIALOG_AUTH_EMAIL,
 						 DIALOG_STYLE_INPUT,
 						 caption,
 						 "\n\
 						  {E9E9F0}Prieð pradedant þaidimà {D6B65E}"#SERVER_NAME"{E9E9F0} serveryje, mums reikalingas jûsø {D6B65E}el. paðto adresas{E9E9F0}.\n\
-						  Ðis el. paðto adresas bus naudojamas þaidimo paskyros saugumo naudai.\n\
+						  ðis el. paðto adresas bus naudojamas þaidimo paskyros saugumo naudai.\n\
 						  Su ðiuo el. paðto adresu, svetainëje {D6B65E}"#SERVER_WEBSITE"/paskyra{E9E9F0} galësite pasikeisti\n\
 						  savo paskyros pamirðtà slaptaþodá.\
 						  \n\n\
@@ -134,30 +132,32 @@ stock authUI_promptAuthDialog(playerid, authRenderOption:error=AUTH_NORMAL) {
 						 "Þaisti", button2
 		);
 	} case AUTH_INVALID_PASS: {
-		if (metadata[playerid][loginAttempts]++ == 3) {
-			SendClientMessage(playerid, 0xA9C4E4FF, "Kadangi ávedëte 3 kartus neteisingà paskyros slaptaþodá, ryðys su þaidimo serveriu nutrûko.");
-			ClosePlayerDialog(playerid);
-			player_kick(playerid);
+		if (player_isRegistered(playerid)) {
+			if (metadata[playerid][loginAttempts]++ == 3) {
+				SendClientMessage(playerid, 0xA9C4E4FF, "Kadangi ávedëte 3 kartus neteisingà paskyros slaptaþodá, ryðys su þaidimo serveriu nutrûko.");
+				ClosePlayerDialog(playerid);
+				player_kick(playerid);
+				return;
+			}
+			PlayerPlaySound(playerid, 1055, 0.0, 0.0, 0.0);
+			ShowPlayerDialog(playerid,
+							serverDialog:DIALOG_AUTH,
+							DIALOG_STYLE_PASSWORD,
+							caption,
+							"\n\
+							{E36056}Slaptaþodis, kurá ávedëte yra neteisingas!{E9E9F0}\n\
+							ðis slapyvaris yra registruotas bei jûsø nurodytas slaptaþodis nëra teisingas ðios þaidimo\n\
+							paskyros slaptaþodis. Praðome ávesti teisingà ðios paskyros slaptaþodá. Saugumo sumetimais,\n\
+							ávedus 3 kartus neteisingà slaptaþodá, jûs bûsite iðmestas ið þaidimo serverio sesijos.\
+							\n\n\
+							• Pamirðote slaptaþodá? Apsilankykite svetainëje {E36056}"#SERVER_WEBSITE"/paskyra{E9E9F0} bei sekite\n\
+							nurodymus, kaip pasikeisti savo þaidimo paskyros pamirðtà slaptaþodá.\
+							\n\n\
+							Praðome ávesti teisingà slaptaþodá á þemiau esantá slaptaþodþio teksto laukà:",
+							"Prisijungti", button2
+			);	
 			return;
 		}
-		PlayerPlaySound(playerid, 1055, 0.0, 0.0, 0.0);
-		ShowPlayerDialog(playerid,
-						 serverDialog:DIALOG_AUTH,
-						 DIALOG_STYLE_PASSWORD,
-						 caption,
-						 "\n\
-						  {E36056}Slaptaþodis, kurá ávedëte yra neteisingas!{E9E9F0}\n\
-						  Ðis slapyvaris yra registruotas bei jûsø nurodytas slaptaþodis nëra teisingas ðios þaidimo\n\
-						  paskyros slaptaþodis. Praðome ávesti teisingà ðios paskyros slaptaþodá. Saugumo sumetimais,\n\
-						  ávedus 3 kartus neteisingà slaptaþodá, jûs bûsite iðmestas ið þaidimo serverio sesijos.\
-						  \n\n\
-						  • Pamirðote slaptaþodá? Apsilankykite svetainëje {E36056}"#SERVER_WEBSITE"/paskyra{E9E9F0} bei sekite\n\
-						  nurodymus, kaip pasikeisti savo þaidimo paskyros pamirðtà slaptaþodá.\
-						  \n\n\
-						  Praðome ávesti teisingà slaptaþodá á þemiau esantá slaptaþodþio teksto laukà:",
-						 "Prisijungti", button2
-		);	
-	} case AUTH_INCORRECT_PASS: {
 		ShowPlayerDialog(playerid,
 						 serverDialog:DIALOG_AUTH,
 						 DIALOG_STYLE_PASSWORD,
@@ -214,7 +214,6 @@ stock authUI_close(playerid) {
 	}
 	metadata[playerid][loginAttempts] = 0;
 	metadata[playerid][policyAgreed] = false;
-	metadata[playerid][verificated] = false;
 
 	SetPlayerTime(playerid, 12, 0);
 	SetPlayerPos(playerid, 1133.0504,-2038.4034, -50.0000);
