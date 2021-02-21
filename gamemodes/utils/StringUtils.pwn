@@ -46,3 +46,36 @@ stock stringUtils_isValidUsername(const str[]) {
 	}
 	return found ? true : false;
 }
+
+stock stringUtils_isValidMail(const str[]) {
+	new length = strlen(str);
+	if (length < 6 || str[0] == 64 || str[length] == 64) {
+		return false;
+	}
+	static const domains[12][] = {
+		"gmail.com",
+		"one.lt",
+		"yahoo.com",
+		"hotmail.com",
+		"outlook.com",
+		"protonmail.com",
+		"zohomail.eu",
+		"inbox.lt",
+		"icloud.com",
+		"me.com",
+		"mac.com",
+		"yandex.ru"
+	};
+	for (new i = 1; i < length-1; i++) {
+		if (str[i] == 64) {
+			new dLength = sizeof(domains);
+			for (new j = 0; j < dLength; j++) {
+				if (strcmp(domains[j], str[i+1], true) == 0) {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+	return false;
+}

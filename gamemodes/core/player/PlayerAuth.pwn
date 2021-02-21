@@ -5,13 +5,16 @@ stock player_isRegistered(playerid) {
 	return isNull(sPlayerData[playerid][hashedPass]) ? false : true;
 }
 
+stock player_hasEmail(playerid) {
+	return isNull(sPlayerData[playerid][hashedEmail]) ? false : true;
+}
+
 stock player_isAuthenticating(playerid) {
 	return serverWorld:GetPlayerVirtualWorld(playerid) == serverWorld:WORLD_AUTH ? true : false;
 }
 
 stock player_auth(playerid, password[]) {
 	new length = strlen(password);
-	//wtf?
 	if (length < MIN_PASSWORD || length > MAX_PASSWORD) {
 		return false;
 	}
@@ -27,6 +30,5 @@ stock player_auth(playerid, password[]) {
 		return false;
 	}
 	return true;
-	//todo register
 }
 

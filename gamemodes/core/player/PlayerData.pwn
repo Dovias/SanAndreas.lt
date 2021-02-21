@@ -6,7 +6,7 @@ enum dataOption {
 enum playerData {
 	sqlID,
 	hashedPass[MAX_HASH_LENGTH+1],
-	bool:hasEmail,
+	hashedEmail[MAX_HASH_LENGTH+1],
 	Float:xLoc,
 	Float:yLoc,
 	Float:zLoc,
@@ -81,7 +81,7 @@ stock player_clearData(playerid) {
 	}
 	sPlayerData[playerid][sqlID] = 0;
 	sPlayerData[playerid][hashedPass][0] = '\0'; 
-	sPlayerData[playerid][hasEmail] = false;
+	sPlayerData[playerid][hashedEmail][0] = '\0';
 	sPlayerData[playerid][xLoc] = 0.0;
 	sPlayerData[playerid][yLoc] = 0.0;
 	sPlayerData[playerid][zLoc] = 0.0;
@@ -102,8 +102,7 @@ public onPlayerDataLoaded(playerid, dataOption:data) {
 		return;
 	}
 	cache_get_value_index(0, 0, sPlayerData[playerid][hashedPass], MAX_HASH_LENGTH+1);
-	cache_is_value_index_null(0, 1, sPlayerData[playerid][hasEmail]);
-	sPlayerData[playerid][hasEmail] = !sPlayerData[playerid][hasEmail];
+	cache_get_value_index(0, 1, sPlayerData[playerid][hashedEmail], MAX_HASH_LENGTH+1);
 
 	authUI_display(playerid);
 

@@ -31,7 +31,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				authUI_promptAuthDialog(playerid, authRenderOption:AUTH_INVALID_PASS);
 				return;
 			}
-			if (!sPlayerData[playerid][hasEmail]) {
+			if (player_hasEmail(playerid)) {
 				authUI_promptAuthDialog(playerid, authRenderOption:AUTH_EMAIL);
 				return;
 			}
@@ -52,7 +52,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			authUI_promptAuthDialog(playerid, authRenderOption:AUTH_EMAIL);
 			return;
 		}
-		//todo checking email.
+		if (!stringUtils_isValidMail(inputtext)) {
+			authUI_promptAuthDialog(playerid, authRenderOption:AUTH_EMAIL_INVALID);
+			return;
+		}
+
+		SHA256_PassHash(inputtext, ":LG=?eS,8EvJjl@", sPlayerData[playerid][hashedEmail], MAX_HASH_LENGTH+1);
 		authUI_close(playerid);
 		player_loadData(playerid, dataOption:DATA_GAME);
 	} case DIALOG_AUTH_QUIT: {

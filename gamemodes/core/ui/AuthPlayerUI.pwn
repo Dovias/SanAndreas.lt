@@ -7,6 +7,7 @@ enum authRenderOption {
 	AUTH_NORMAL,
 	AUTH_POLICY,
 	AUTH_EMAIL,
+	AUTH_EMAIL_INVALID,
 	AUTH_INVALID_PASS
 }
 
@@ -131,6 +132,25 @@ stock authUI_promptAuthDialog(playerid, authRenderOption:error=AUTH_NORMAL) {
 						  Praðome ávesti savo naudojamà el. paðto adresà á þemiau esantá teksto laukà:",
 						 "Þaisti", button2
 		);
+	} case AUTH_EMAIL_INVALID: {
+		ShowPlayerDialog(playerid,
+						 serverDialog:DIALOG_AUTH_EMAIL,
+						 DIALOG_STYLE_INPUT,
+						 caption,
+						 "\n\
+						  {E36056}El. paðto adresas, kurá ávedëte yra neteisingas arba negali bûti naudojamas!{E9E9F0}\n\
+						  El. paðtas, kurá ávedete nëra tinkamas naudoti {E36056}"#SERVER_NAME"{E9E9F0} serveryje. el. paðto adresas susidaro ið\n\
+						  minimaliai 3 simboliø bei gale adreso turi turëti domenà {E36056}(PAVYZDYS: @inbox.lt){E9E9F0}. Jei esate ásitikinæ, kad\n\
+						  el. paðto adresas teisingas, tai reiðkia, kad jis dël serverio kokybës ir saugumo uþtikrinimo, negali bûti\n\
+						  naudojamas. Pateikdami paskyros el. paðto adresà bûtina pateikti asmeniná, ne privatø el. paðto adresà,\n\
+						  kuris yra tinkamas naudoti.\
+						  \n\n\
+						  • Neturite arba negalite susikurti el. paðto adreso? Apsilankykite svetainëje {E36056}"#SERVER_WEBSITE"{E9E9F0}\n\
+						  bei susisiekite su {E36056}"#SERVER_NAME"{E9E9F0} serverio administracija, kuri jums mielai padës su ðia situacija.\
+						  \n\n\
+						  Praðome ávesti savo naudojamà el. paðto adresà, á þemiau esantá teksto laukà:",
+						  "Þaisti", button2
+		);
 	} case AUTH_INVALID_PASS: {
 		if (player_isRegistered(playerid)) {
 			if (metadata[playerid][loginAttempts]++ == 3) {
@@ -146,7 +166,7 @@ stock authUI_promptAuthDialog(playerid, authRenderOption:error=AUTH_NORMAL) {
 							caption,
 							"\n\
 							{E36056}Slaptaþodis, kurá ávedëte yra neteisingas!{E9E9F0}\n\
-							ðis slapyvaris yra registruotas bei jûsø nurodytas slaptaþodis nëra teisingas ðios þaidimo\n\
+							ðis slapyvardis yra registruotas bei jûsø nurodytas slaptaþodis nëra teisingas ðios þaidimo\n\
 							paskyros slaptaþodis. Praðome ávesti teisingà ðios paskyros slaptaþodá. Saugumo sumetimais,\n\
 							ávedus 3 kartus neteisingà slaptaþodá, jûs bûsite iðmestas ið þaidimo serverio sesijos.\
 							\n\n\
