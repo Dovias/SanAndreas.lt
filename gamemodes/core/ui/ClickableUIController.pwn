@@ -5,7 +5,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid) {
 	if (clickedid == authUI_login_button) {
 		authUI_promptAuthDialog(playerid);
 	} else if (clickedid == authUI_register_button) {
-		if (!metadata[playerid][policyAgreed]) {
+		if (!sPlayerData[playerid][policyAgreed]) {
 			authUI_promptAuthDialog(playerid, authRenderOption:AUTH_POLICY);
 			return;
 		}
@@ -42,7 +42,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		if (!response) {
 			return;
 		}
-		metadata[playerid][policyAgreed] = true;
+		sPlayerData[playerid][policyAgreed] = true;
 		authUI_promptAuthDialog(playerid);
 	} case DIALOG_AUTH_EMAIL: {
 		if (!response) {

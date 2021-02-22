@@ -26,7 +26,6 @@ stock authUI_display(playerid) {
 		strcat(text, "~s~ nera~n~         registruotas!", sizeof(text));
 		TextDrawShowForPlayer(playerid, authUI_register_button);
 	}
-	print(sPlayerData[playerid][hashedPass]);
 	TextDrawShowForPlayer(playerid, authUI_sidebar);
 	TextDrawShowForPlayer(playerid, authUI_logo);
 	TextDrawShowForPlayer(playerid, authUI_excl_mark);
@@ -51,7 +50,6 @@ stock authUI_display(playerid) {
 	SetPlayerTime(playerid, 20, 20);
 	new Float:x, Float:y, Float:z;
 	GetPlayerCameraPos(playerid, x, y, z);
-	printf("%f, %f, %f", x, y, z);
 	SetPlayerPos(playerid, 309.509094, 1500.099121, -25.101613);
 	SetPlayerCameraPos(playerid, 309.509094, 1500.099121, 23.101613);
 	SetPlayerCameraLookAt(playerid, 314.317901, 1489.738037, 23.252632, 0);

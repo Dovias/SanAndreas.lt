@@ -7,7 +7,7 @@ enum playerData {
 	//UI metadata
 	PlayerText:authUIInfo,
 	bool:policyAgreed,
-	loginAttempts
+	loginAttempts,
 
 	sqlID,
 	hashedPass[MAX_HASH_LENGTH+1],
