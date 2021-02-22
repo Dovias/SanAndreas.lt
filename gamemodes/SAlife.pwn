@@ -1,4 +1,5 @@
 #include <a_samp>
+#include <PawnPlus>
 #include "core/TaskScheduler.pwn"
 #include "core/Macros.pwn"
 #include "core/GlobalConstants.pwn"

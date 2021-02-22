@@ -11,15 +11,6 @@ enum authRenderOption {
 	AUTH_INVALID_PASS
 }
 
-enum authUImetadata {
-	PlayerText:authUIInfo,
-	bool:policyAgreed,
-	loginAttempts
-}
-
-new metadata[MAX_PLAYERS][authUImetadata];
-
-
 stock authUI_display(playerid) {
 	new nickname[MAX_CPLAYER_NAME+1];
 	if (!GetPlayerName(playerid, nickname, sizeof(nickname))) {
@@ -42,20 +33,20 @@ stock authUI_display(playerid) {
 	TextDrawShowForPlayer(playerid, authUI_info_button);
 	TextDrawShowForPlayer(playerid, authUI_quit_button);
 
-	metadata[playerid][authUIInfo] = CreatePlayerTextDraw(playerid, 62.000000, 180.000000, text);
-	PlayerTextDrawFont(playerid, metadata[playerid][authUIInfo], 2);
-	PlayerTextDrawLetterSize(playerid, metadata[playerid][authUIInfo], 0.125000, 0.949998);
-	PlayerTextDrawTextSize(playerid, metadata[playerid][authUIInfo], 152.000000, 0.000000);
-	PlayerTextDrawSetOutline(playerid, metadata[playerid][authUIInfo], 1);
-	PlayerTextDrawSetShadow(playerid, metadata[playerid][authUIInfo], 0);
-	PlayerTextDrawAlignment(playerid, metadata[playerid][authUIInfo], 1);
-	PlayerTextDrawColor(playerid, metadata[playerid][authUIInfo], -1);
-	PlayerTextDrawBackgroundColor(playerid, metadata[playerid][authUIInfo], 255);
-	PlayerTextDrawBoxColor(playerid, metadata[playerid][authUIInfo], 255);
-	PlayerTextDrawUseBox(playerid, metadata[playerid][authUIInfo], 0);
-	PlayerTextDrawSetProportional(playerid, metadata[playerid][authUIInfo], 1);
-	PlayerTextDrawSetSelectable(playerid, metadata[playerid][authUIInfo], 0);
-	PlayerTextDrawShow(playerid, metadata[playerid][authUIInfo]);
+	sPlayerData[playerid][authUIInfo] = CreatePlayerTextDraw(playerid, 62.000000, 180.000000, text);
+	PlayerTextDrawFont(playerid, sPlayerData[playerid][authUIInfo], 2);
+	PlayerTextDrawLetterSize(playerid, sPlayerData[playerid][authUIInfo], 0.125000, 0.949998);
+	PlayerTextDrawTextSize(playerid, sPlayerData[playerid][authUIInfo], 152.000000, 0.000000);
+	PlayerTextDrawSetOutline(playerid, sPlayerData[playerid][authUIInfo], 1);
+	PlayerTextDrawSetShadow(playerid, sPlayerData[playerid][authUIInfo], 0);
+	PlayerTextDrawAlignment(playerid, sPlayerData[playerid][authUIInfo], 1);
+	PlayerTextDrawColor(playerid, sPlayerData[playerid][authUIInfo], -1);
+	PlayerTextDrawBackgroundColor(playerid, sPlayerData[playerid][authUIInfo], 255);
+	PlayerTextDrawBoxColor(playerid, sPlayerData[playerid][authUIInfo], 255);
+	PlayerTextDrawUseBox(playerid, sPlayerData[playerid][authUIInfo], 0);
+	PlayerTextDrawSetProportional(playerid, sPlayerData[playerid][authUIInfo], 1);
+	PlayerTextDrawSetSelectable(playerid, sPlayerData[playerid][authUIInfo], 0);
+	PlayerTextDrawShow(playerid, sPlayerData[playerid][authUIInfo]);
 
 	SetPlayerTime(playerid, 20, 20);
 	new Float:x, Float:y, Float:z;
@@ -153,7 +144,7 @@ stock authUI_promptAuthDialog(playerid, authRenderOption:error=AUTH_NORMAL) {
 		);
 	} case AUTH_INVALID_PASS: {
 		if (player_isRegistered(playerid)) {
-			if (metadata[playerid][loginAttempts]++ == 3) {
+			if (sPlayerData[playerid][loginAttempts]++ == 3) {
 				SendClientMessage(playerid, 0xA9C4E4FF, "Kadangi ávedëte 3 kartus neteisingà paskyros slaptaþodá, ryðys su þaidimo serveriu nutrûko.");
 				ClosePlayerDialog(playerid);
 				player_kick(playerid);
@@ -232,8 +223,8 @@ stock authUI_close(playerid) {
 	if (!player_isAuthenticating(playerid)) {
 		return;
 	}
-	metadata[playerid][loginAttempts] = 0;
-	metadata[playerid][policyAgreed] = false;
+	sPlayerData[playerid][loginAttempts] = 0;
+	sPlayerData[playerid][policyAgreed] = false;
 
 	SetPlayerTime(playerid, 12, 0);
 	SetPlayerPos(playerid, 1133.0504,-2038.4034, -50.0000);
@@ -242,7 +233,7 @@ stock authUI_close(playerid) {
 	SetPlayerVirtualWorld(playerid, serverWorld:WORLD_GAMEPLAY);
 
 	CancelSelectTextDraw(playerid);
-	PlayerTextDrawHide(playerid, metadata[playerid][authUIInfo]);
+	PlayerTextDrawHide(playerid, sPlayerData[playerid][authUIInfo]);
 	TextDrawHideForPlayer(playerid, authUI_sidebar);
 	TextDrawHideForPlayer(playerid, authUI_logo);
 	TextDrawHideForPlayer(playerid, authUI_excl_mark);

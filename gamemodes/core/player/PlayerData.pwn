@@ -4,6 +4,11 @@ enum dataOption {
 }
 
 enum playerData {
+	//UI metadata
+	PlayerText:authUIInfo,
+	bool:policyAgreed,
+	loginAttempts
+
 	sqlID,
 	hashedPass[MAX_HASH_LENGTH+1],
 	hashedEmail[MAX_HASH_LENGTH+1],
